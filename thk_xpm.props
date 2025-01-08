@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ImportGroup Label="PropertySheets" />
+  <PropertyGroup Label="UserMacros">
+    <THK_XP_MODE>1</THK_XP_MODE>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OutDir Condition="'$(OutputType)' == 'staticlibrary'">$(SolutionDir)libxp_$(PlatformTarget)_$(PlatformToolset)\</OutDir>
+    <OutDir Condition="'$(OutputType)' != 'staticlibrary'">$(SolutionDir)binxp_$(PlatformTarget)_$(PlatformToolset)\</OutDir>
+    <OutDir Condition="'$(OutputType)' == 'staticlibrary'">$(SolutionDir)libxp_$(PlatformTarget)_$(PlatformToolset)\</OutDir>
+    <OutDir Condition="'$(OutputType)' != 'staticlibrary'">$(SolutionDir)binxp_$(PlatformTarget)_$(PlatformToolset)\</OutDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup />
+  <ItemGroup>
+    <BuildMacro Include="THK_XP_MODE">
+      <Value>$(THK_XP_MODE)</Value>
+      <EnvironmentVariable>true</EnvironmentVariable>
+    </BuildMacro>
+  </ItemGroup>
+</Project>

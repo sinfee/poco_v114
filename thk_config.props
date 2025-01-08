@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Label="UserMacros">
+  </PropertyGroup>
+  <PropertyGroup>
+    <IntDir>$(DevelopTemp)\$(SolutionName)\$(Platform)_$(PlatformToolset)\$(ProjectName)\$(Configuration)\</IntDir>
+    <OutDir Condition="$(THK_XP_MODE) ==1 AND '$(OutputType)' == 'staticlibrary'">$(SolutionDir)lib_$(PlatformTarget)_$(PlatformToolset)_xp\</OutDir>
+    <OutDir Condition="$(THK_XP_MODE) ==1 AND '$(OutputType)' != 'staticlibrary'">$(SolutionDir)bin_$(PlatformTarget)_$(PlatformToolset)_xp\</OutDir>
+    <OutDir Condition="$(THK_XP_MODE) !=1 AND '$(OutputType)' == 'staticlibrary'">$(SolutionDir)lib_$(PlatformTarget)_$(PlatformToolset)\</OutDir>
+    <OutDir Condition="$(THK_XP_MODE) !=1 AND '$(OutputType)' != 'staticlibrary'">$(SolutionDir)bin_$(PlatformTarget)_$(PlatformToolset)\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Label="Globals">
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <PreprocessorDefinitions Condition="$(THK_XP_MODE) ==1  or $(PlatformToolset.EndsWith('_xp'))">POCO_FORCE_MIN_WINDOWS_OS_SUPPORT;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions Condition="$(THK_XP_MODE) !=1  AND !$(PlatformToolset.EndsWith('_xp'))">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard_C>stdc11</LanguageStandard_C>
+    </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories Condition="$(THK_XP_MODE) ==1  or $(PlatformToolset.EndsWith('_xp'))">$(SolutionDir)lib_$(PlatformTarget)_$(PlatformToolset)_xp;$(SolutionDir)thirdapi\lib$(PlatformTarget);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories Condition="$(THK_XP_MODE) !=1  AND !$(PlatformToolset.EndsWith('_xp'))">$(SolutionDir)lib_$(PlatformTarget)_$(PlatformToolset);$(SolutionDir)thirdapi\lib$(PlatformTarget);$(ThkExtApi)\YYThunk\objs\$(PlatformTarget);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies Condition="$(THK_XP_MODE) ==1  or $(PlatformToolset.EndsWith('_xp'))">YY_Thunks_for_WinXP.obj;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies Condition="$(THK_XP_MODE) !=1  AND !$(PlatformToolset.EndsWith('_xp'))">YY_Thunks_for_Win7.obj;%(AdditionalDependencies)</AdditionalDependencies>
+      <EntryPointSymbol Condition="'$(OutputType)' == 'library' AND ($(THK_XP_MODE) ==1  or $(PlatformToolset.EndsWith('_xp')))">DllMainCRTStartupForYY_Thunks</EntryPointSymbol>
+    </Link>
+  </ItemDefinitionGroup>
+  <PropertyGroup Label="Configuration">
+  </PropertyGroup>
+</Project>
