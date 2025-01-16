@@ -517,7 +517,6 @@
     <Link>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ProgramDatabaseFile>..\bin\PocoSevenZipd.pdb</ProgramDatabaseFile>
       <AdditionalLibraryDirectories>$(SolutionDir)lib_$(PlatformTarget)_$(PlatformToolset);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <SubSystem>Console</SubSystem>
       <ImportLibrary>$(SolutionDir)lib_$(PlatformTarget)_$(PlatformToolset)\PocoSevenZipd.lib</ImportLibrary>
@@ -680,7 +679,6 @@
     <Link>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ProgramDatabaseFile>..\bin64\PocoSevenZip64d.pdb</ProgramDatabaseFile>
       <AdditionalLibraryDirectories>$(SolutionDir)lib_$(PlatformTarget)_$(PlatformToolset);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <SubSystem>Console</SubSystem>
       <ImportLibrary>$(SolutionDir)lib_$(PlatformTarget)_$(PlatformToolset)\PocoSevenZipd.lib</ImportLibrary>

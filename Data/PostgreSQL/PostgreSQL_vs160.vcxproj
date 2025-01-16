@@ -210,12 +210,12 @@
     <TargetName Condition="'$(Configuration)|$(Platform)'=='release_static_mt|x64'">PocoDataPostgreSQLmt</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='debug_shared|Win32'">
-    <OutDir>..\..\bin_xp\</OutDir>
+    <OutDir>$(SolutionDir)binxp_$(PlatformTarget)_v141\</OutDir>
     <IntDir>$(DevelopTemp)\$(SolutionName)\$(Platform)\$(ProjectName)\$(Configuration)\</IntDir>
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='release_shared|Win32'">
-    <OutDir>..\..\bin_xp\</OutDir>
+    <OutDir>$(SolutionDir)binxp_$(PlatformTarget)_v141\</OutDir>
     <IntDir>$(DevelopTemp)\$(SolutionName)\$(Platform)\$(ProjectName)\$(Configuration)\</IntDir>
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
@@ -236,12 +236,12 @@
     <IntDir>$(DevelopTemp)\$(SolutionName)\$(Platform)\$(ProjectName)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='debug_shared|x64'">
-    <OutDir>..\..\bin64_xp\</OutDir>
+    <OutDir>$(SolutionDir)binxp_$(PlatformTarget)_v141\</OutDir>
     <IntDir>$(DevelopTemp)\$(SolutionName)\$(Platform)\$(ProjectName)\$(Configuration)\</IntDir>
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='release_shared|x64'">
-    <OutDir>..\..\bin64_xp\</OutDir>
+    <OutDir>$(SolutionDir)binxp_$(PlatformTarget)_v141\</OutDir>
     <IntDir>$(DevelopTemp)\$(SolutionName)\$(Platform)\$(ProjectName)\$(Configuration)\</IntDir>
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
