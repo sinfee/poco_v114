@@ -85,6 +85,33 @@ S trimLeft(const S& str)
 	return S(it, end);
 }
 
+template <class S>
+S trimLeft(const S& str, const S& c)
+/// Returns a copy of str with all leading
+/// whitespace removed.
+{
+	if (str.empty()) return str;
+
+	typename S::const_iterator it = str.begin();
+	typename S::const_iterator end = str.end();
+
+	while (it != end && c.find(*it) != S::npos) ++it;
+	return S(it, end);
+}
+
+template <class S,class C>
+S trimLeft(const S& str,C c)
+/// Returns a copy of str with all leading
+/// whitespace removed.
+{
+	if (str.empty()) return str;
+
+	typename S::const_iterator it = str.begin();
+	typename S::const_iterator end = str.end();
+
+	while (it != end && c== (*it)) ++it;
+	return S(it, end);
+}
 
 template <class S>
 S& trimLeftInPlace(S& str)
@@ -100,6 +127,35 @@ S& trimLeftInPlace(S& str)
 	return str;
 }
 
+template <class S>
+S& trimLeftInPlace(S& str, const S& c)
+/// Returns a copy of str with all leading
+/// whitespace removed.
+{
+	if (str.empty()) return str;
+
+	typename S::const_iterator it = str.begin();
+	typename S::const_iterator end = str.end();
+
+	while (it != end && c.find(*it) != S::npos) ++it;
+	str.erase(str.begin(), it);
+	return str;
+}
+
+template <class S, class C>
+S& trimLeftInPlace(S& str, C c)
+/// Returns a copy of str with all leading
+/// whitespace removed.
+{
+	if (str.empty()) return str;
+
+	typename S::const_iterator it = str.begin();
+	typename S::const_iterator end = str.end();
+
+	while (it != end && c == (*it)) ++it;
+	str.erase(str.begin(), it);
+	return str;
+}
 
 template <class S>
 S trimRight(const S& str)
@@ -113,6 +169,29 @@ S trimRight(const S& str)
 	return S(str, 0, pos + 1);
 }
 
+template <class S>
+S trimRight(const S& str, const S& c)
+/// Returns a copy of str with all leading
+/// whitespace removed.
+{
+	if (str.empty()) return str;
+	std::ptrdiff_t pos = static_cast<std::ptrdiff_t>(str.size()) - 1;
+
+	while (pos >= 0 && c.find(str[pos]) != S::npos) --pos;
+	return S(str, 0, pos + 1);
+}
+
+template <class S, class C>
+S trimRight(const S& str, C c)
+/// Returns a copy of str with all leading
+/// whitespace removed.
+{
+	if (str.empty()) return str;
+	std::ptrdiff_t pos = static_cast<std::ptrdiff_t>(str.size()) - 1;
+
+	while (pos >= 0 && c == str[pos]) --pos;
+	return S(str, 0, pos + 1);
+}
 
 template <class S>
 S& trimRightInPlace(S& str)
@@ -127,6 +206,33 @@ S& trimRightInPlace(S& str)
 	return str;
 }
 
+template <class S>
+S& trimRightInPlace(S& str, const S& c)
+/// Returns a copy of str with all leading
+/// whitespace removed.
+{
+	if (str.empty()) return str;
+	std::ptrdiff_t pos = static_cast<std::ptrdiff_t>(str.size()) - 1;
+
+	while (pos >= 0 && c.find(str[pos]) != S::npos) --pos;
+	str.resize(pos + 1);
+
+	return str;
+}
+
+template <class S, class C>
+S& trimRightInPlace(S& str, C c)
+/// Returns a copy of str with all leading
+/// whitespace removed.
+{
+	if (str.empty()) return str;
+	std::ptrdiff_t pos = static_cast<std::ptrdiff_t>(str.size()) - 1;
+
+	while (pos >= 0 && c == str[pos]) --pos;
+	str.resize(pos + 1);
+
+	return str;
+}
 
 template <class S>
 S trim(const S& str)
@@ -143,6 +249,35 @@ S trim(const S& str)
 	return S(str, first, last - first + 1);
 }
 
+template <class S>
+S trim(const S& str, const S& c)
+/// Returns a copy of str with all leading
+/// whitespace removed.
+{
+	if (str.empty()) return str;
+	std::ptrdiff_t first = 0;
+	std::ptrdiff_t last = static_cast<std::ptrdiff_t>(str.size()) - 1;
+
+	while (first <= last && c.find(str[first]) != S::npos) ++first;
+	while (last >= first && c.find(str[last]) != S::npos ) --last;
+
+	return S(str, first, last - first + 1);
+}
+
+template <class S, class C>
+S trim(const S& str, C c)
+/// Returns a copy of str with all leading
+/// whitespace removed.
+{
+	if (str.empty()) return str;
+	std::ptrdiff_t first = 0;
+	std::ptrdiff_t last = static_cast<std::ptrdiff_t>(str.size()) - 1;
+
+	while (first <= last && c == str[first]) ++first;
+	while (last >= first && c == str[last]) --last;
+
+	return S(str, first, last - first + 1);
+}
 
 template <class S>
 S& trimInPlace(S& str)
@@ -163,6 +298,46 @@ S& trimInPlace(S& str)
 	return str;
 }
 
+
+template <class S>
+S& trimInPlace(S& str, const S& c)
+/// Returns a copy of str with all leading
+/// whitespace removed.
+{
+	if (str.empty()) return str;
+	std::ptrdiff_t first = 0;
+	std::ptrdiff_t last = static_cast<std::ptrdiff_t>(str.size()) - 1;
+
+	while (first <= last && c.find(str[first]) != S::npos) ++first;
+	while (last >= first && c.find(str[last]) != S::npos) --last;
+
+	if (last >= 0)
+	{
+		str.resize(last + 1);
+		str.erase(0, first);
+	}
+	return str;
+}
+
+template <class S, class C>
+S& trimInPlace(S& str, C c)
+/// Returns a copy of str with all leading
+/// whitespace removed.
+{
+	if (str.empty()) return str;
+	std::ptrdiff_t first = 0;
+	std::ptrdiff_t last = static_cast<std::ptrdiff_t>(str.size()) - 1;
+
+	while (first <= last && c == str[first]) ++first;
+	while (last >= first && c == str[last]) --last;
+
+	if (last >= 0)
+	{
+		str.resize(last + 1);
+		str.erase(0, first);
+	}
+	return str;
+}
 
 template <class S>
 S toUpper(const S& str)
