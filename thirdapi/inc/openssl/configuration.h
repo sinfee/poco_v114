@@ -26,16 +26,24 @@ extern "C" {
 /*
  * OpenSSL was configured with the following options:
  */
-
+#if (defined __amd64)||(defined _M_X64)
+# ifndef OPENSSL_SYS_WIN64A
+#  define OPENSSL_SYS_WIN64A 1
+# endif
+#else
 # ifndef OPENSSL_SYS_WIN32
 #  define OPENSSL_SYS_WIN32 1
 # endif
-# define OPENSSL_CONFIGURED_API 30300
+#endif
+# define OPENSSL_CONFIGURED_API 30400
 # ifndef OPENSSL_RAND_SEED_OS
 #  define OPENSSL_RAND_SEED_OS
 # endif
 # ifndef OPENSSL_THREADS
 #  define OPENSSL_THREADS
+# endif
+# ifndef OPENSSL_NO_ACVP_TESTS
+#  define OPENSSL_NO_ACVP_TESTS
 # endif
 # ifndef OPENSSL_NO_AFALGENG
 #  define OPENSSL_NO_AFALGENG
@@ -55,6 +63,9 @@ extern "C" {
 # ifndef OPENSSL_NO_CRYPTO_MDEBUG_BACKTRACE
 #  define OPENSSL_NO_CRYPTO_MDEBUG_BACKTRACE
 # endif
+# ifndef OPENSSL_NO_DEMOS
+#  define OPENSSL_NO_DEMOS
+# endif
 # ifndef OPENSSL_NO_DEVCRYPTOENG
 #  define OPENSSL_NO_DEVCRYPTOENG
 # endif
@@ -70,11 +81,23 @@ extern "C" {
 # ifndef OPENSSL_NO_EXTERNAL_TESTS
 #  define OPENSSL_NO_EXTERNAL_TESTS
 # endif
+# ifndef OPENSSL_NO_FIPS_POST
+#  define OPENSSL_NO_FIPS_POST
+# endif
+# ifndef OPENSSL_NO_FIPS_SECURITYCHECKS
+#  define OPENSSL_NO_FIPS_SECURITYCHECKS
+# endif
 # ifndef OPENSSL_NO_FUZZ_AFL
 #  define OPENSSL_NO_FUZZ_AFL
 # endif
 # ifndef OPENSSL_NO_FUZZ_LIBFUZZER
 #  define OPENSSL_NO_FUZZ_LIBFUZZER
+# endif
+# ifndef OPENSSL_NO_H3DEMO
+#  define OPENSSL_NO_H3DEMO
+# endif
+# ifndef OPENSSL_NO_JITTER
+#  define OPENSSL_NO_JITTER
 # endif
 # ifndef OPENSSL_NO_KTLS
 #  define OPENSSL_NO_KTLS
@@ -88,11 +111,20 @@ extern "C" {
 # ifndef OPENSSL_NO_MSAN
 #  define OPENSSL_NO_MSAN
 # endif
+# ifndef OPENSSL_NO_PIE
+#  define OPENSSL_NO_PIE
+# endif
 # ifndef OPENSSL_NO_RC5
 #  define OPENSSL_NO_RC5
 # endif
 # ifndef OPENSSL_NO_SCTP
 #  define OPENSSL_NO_SCTP
+# endif
+# ifndef OPENSSL_NO_SSL3
+#  define OPENSSL_NO_SSL3
+# endif
+# ifndef OPENSSL_NO_SSL3_METHOD
+#  define OPENSSL_NO_SSL3_METHOD
 # endif
 # ifndef OPENSSL_NO_TESTS
 #  define OPENSSL_NO_TESTS
@@ -108,6 +140,9 @@ extern "C" {
 # endif
 # ifndef OPENSSL_NO_UNIT_TEST
 #  define OPENSSL_NO_UNIT_TEST
+# endif
+# ifndef OPENSSL_NO_UPLINK
+#  define OPENSSL_NO_UPLINK
 # endif
 # ifndef OPENSSL_NO_WEAK_SSL_CIPHERS
 #  define OPENSSL_NO_WEAK_SSL_CIPHERS
@@ -135,6 +170,16 @@ extern "C" {
 /*
  * The following are cipher-specific, but are part of the public API.
  */
+ 
+#if (defined __amd64)||(defined _M_X64)
+# if !defined(OPENSSL_SYS_UEFI)
+#  undef BN_LLONG
+/* Only one for the following should be defined */
+#  undef SIXTY_FOUR_BIT_LONG
+#  define SIXTY_FOUR_BIT
+#  undef THIRTY_TWO_BIT
+# endif
+#else
 # if !defined(OPENSSL_SYS_UEFI)
 #  define BN_LLONG
 /* Only one for the following should be defined */
@@ -142,6 +187,9 @@ extern "C" {
 #  undef SIXTY_FOUR_BIT
 #  define THIRTY_TWO_BIT
 # endif
+#endif
+ 
+
 
 # define RC4_INT unsigned int
 

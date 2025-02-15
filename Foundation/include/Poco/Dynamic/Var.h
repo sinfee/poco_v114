@@ -185,14 +185,16 @@ public:
 		VarHolder* pHolder = content();
 
 		if (!pHolder)
-			throw InvalidAccessException("Can not convert empty value.");
+				throw InvalidAccessException("Can not convert empty value.");
 
 		if (typeid(T) == pHolder->type())
 			return extract<T>();
-
-		T result;
-		pHolder->convert(result);
-		return result;
+		else
+		{
+			T result;
+			pHolder->convert(result);
+			return result;
+		}
 	}
 
 	template <typename T>
@@ -206,13 +208,12 @@ public:
 	{
 		VarHolder* pHolder = content();
 
-		if ( (pHolder != nullptr) && pHolder->type() == typeid(T))
+		if (pHolder && pHolder->type() == typeid(T))
 		{
 			auto* pHolderImpl = static_cast<VarHolderImpl<T>*>(pHolder);
 			return pHolderImpl->value();
 		}
-
-		if (!pHolder)
+		else if (!pHolder)
 			throw InvalidAccessException("Can not extract empty value.");
 		else
 			throw BadCastException(Poco::format("Can not convert %s to %s.",
@@ -579,8 +580,7 @@ private:
 
 		if (pHolder && pHolder->type() == typeid(T))
 			return static_cast<VarHolderImpl<T>*>(pHolder);
-
-		if (pHolder == nullptr)
+		else if (!pHolder)
 			throw InvalidAccessException("Can not access empty value.");
 		else
 			throw E(errorMessage);
@@ -625,7 +625,7 @@ private:
 
 inline void Var::construct(const char* value)
 {
-	const std::string val(value);
+	std::string val(value);
 	_placeholder.assign<VarHolderImpl<std::string>, std::string>(val);
 }
 
@@ -647,7 +647,7 @@ inline void Var::swap(Var& other)
 	}
 	else
 	{
-		const Var tmp(*this);
+		Var tmp(*this);
 		try
 		{
 			construct(other);
@@ -665,39 +665,39 @@ inline void Var::swap(Var& other)
 inline const std::type_info& Var::type() const
 {
 	VarHolder* pHolder = content();
-	return (pHolder != nullptr) ? pHolder->type() : typeid(void);
+	return pHolder ? pHolder->type() : typeid(void);
 }
 
 
 inline std::string Var::typeName(bool demangle) const
 {
 	VarHolder* pHolder = content();
-	return (pHolder != nullptr) ? demangle ? Poco::demangle(pHolder->type().name()) : pHolder->type().name() : std::string();
+	return pHolder ? demangle ? Poco::demangle(pHolder->type().name()) : pHolder->type().name() : std::string();
 }
 
 
 inline Var::ConstIterator Var::begin() const
 {
-	if (size() == 0) return {const_cast<Var*>(this), true};
+	if (size() == 0) return ConstIterator(const_cast<Var*>(this), true);
 
-	return {const_cast<Var*>(this), false};
+	return ConstIterator(const_cast<Var*>(this), false);
 }
 
 inline Var::ConstIterator Var::end() const
 {
-	return {const_cast<Var*>(this), true};
+	return ConstIterator(const_cast<Var*>(this), true);
 }
 
 inline Var::Iterator Var::begin()
 {
-	if (size() == 0) return {const_cast<Var*>(this), true};
+	if (size() == 0) return Iterator(const_cast<Var*>(this), true);
 
-	return {const_cast<Var*>(this), false};
+	return Iterator(const_cast<Var*>(this), false);
 }
 
 inline Var::Iterator Var::end()
 {
-	return {this, true};
+	return Iterator(this, true);
 }
 
 
@@ -742,112 +742,112 @@ inline bool Var::isArray() const
 	if (isEmpty() || isString()) return false;
 
 	VarHolder* pHolder = content();
-	return (pHolder != nullptr) ? pHolder->isArray() : false;
+	return pHolder ? pHolder->isArray() : false;
 }
 
 
 inline bool Var::isVector() const
 {
 	VarHolder* pHolder = content();
-	return (pHolder != nullptr) ? pHolder->isVector() : false;
+	return pHolder ? pHolder->isVector() : false;
 }
 
 
 inline bool Var::isList() const
 {
 	VarHolder* pHolder = content();
-	return (pHolder != nullptr) ? pHolder->isList() : false;
+	return pHolder ? pHolder->isList() : false;
 }
 
 
 inline bool Var::isDeque() const
 {
 	VarHolder* pHolder = content();
-	return (pHolder != nullptr) ? pHolder->isDeque() : false;
+	return pHolder ? pHolder->isDeque() : false;
 }
 
 
 inline bool Var::isStruct() const
 {
 	VarHolder* pHolder = content();
-	return (pHolder != nullptr) ? pHolder->isStruct() : false;
+	return pHolder ? pHolder->isStruct() : false;
 }
 
 
 inline bool Var::isOrdered() const
 {
 	VarHolder* pHolder = content();
-	return (pHolder != nullptr) ? pHolder->isOrdered() : false;
+	return pHolder ? pHolder->isOrdered() : false;
 }
 
 
 inline bool Var::isInteger() const
 {
 	VarHolder* pHolder = content();
-	return (pHolder != nullptr) ? pHolder->isInteger() : false;
+	return pHolder ? pHolder->isInteger() : false;
 }
 
 
 inline bool Var::isSigned() const
 {
 	VarHolder* pHolder = content();
-	return (pHolder != nullptr) ? pHolder->isSigned() : false;
+	return pHolder ? pHolder->isSigned() : false;
 }
 
 
 inline bool Var::isNumeric() const
 {
 	VarHolder* pHolder = content();
-	return (pHolder != nullptr) ? pHolder->isNumeric() : false;
+	return pHolder ? pHolder->isNumeric() : false;
 }
 
 
 inline bool Var::isBoolean() const
 {
 	VarHolder* pHolder = content();
-	return (pHolder != nullptr) ? pHolder->isBoolean() : false;
+	return pHolder ? pHolder->isBoolean() : false;
 }
 
 
 inline bool Var::isString() const
 {
 	VarHolder* pHolder = content();
-	return (pHolder != nullptr) ? pHolder->isString() : false;
+	return pHolder ? pHolder->isString() : false;
 }
 
 
 inline bool Var::isDate() const
 {
 	VarHolder* pHolder = content();
-	return (pHolder != nullptr) ? pHolder->isDate() : false;
+	return pHolder ? pHolder->isDate() : false;
 }
 
 
 inline bool Var::isTime() const
 {
 	VarHolder* pHolder = content();
-	return (pHolder != nullptr) ? pHolder->isTime() : false;
+	return pHolder ? pHolder->isTime() : false;
 }
 
 
 inline bool Var::isDateTime() const
 {
 	VarHolder* pHolder = content();
-	return (pHolder != nullptr) ? pHolder->isDateTime() : false;
+	return pHolder ? pHolder->isDateTime() : false;
 }
 
 
 inline bool Var::isUUID() const
 {
 	VarHolder* pHolder = content();
-	return (pHolder != nullptr) ? pHolder->isUUID() : false;
+	return pHolder ? pHolder->isUUID() : false;
 }
 
 
 inline std::size_t Var::size() const
 {
 	VarHolder* pHolder = content();
-	return (pHolder != nullptr) ? pHolder->size() : 0;
+	return pHolder ? pHolder->size() : 0;
 }
 
 
@@ -858,7 +858,7 @@ inline std::size_t Var::size() const
 inline const Var operator + (const char* other, const Var& da)
 	/// Addition operator for adding Var to const char*
 {
-	const std::string tmp = other;
+	std::string tmp = other;
 	return tmp + da.convert<std::string>();
 }
 
