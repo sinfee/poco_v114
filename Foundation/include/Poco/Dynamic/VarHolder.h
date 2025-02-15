@@ -1,4 +1,4 @@
-//
+﻿//
 // VarHolder.h
 //
 // Library: Foundation
@@ -1849,7 +1849,7 @@ public:
 		val = NumberFormatter::format(_val);
 	}
 
-	VarHolder* clone(Placeholder<VarHolder>* pVarHolder = nullptr const
+	VarHolder* clone(Placeholder<VarHolder>* pVarHolder = nullptr) const
 	{
 		return cloneHolder(pVarHolder, _val);
 	}
