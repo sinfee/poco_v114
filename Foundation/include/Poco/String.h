@@ -357,8 +357,7 @@ S toUpper(const S& str)
 #endif
 	while (it != end)
 	{
-		int ch = static_cast<unsigned char>(*it);
-		*it = static_cast<typename S::value_type>(Ascii::toUpper(ch));
+			*it = static_cast<typename S::value_type>(Ascii::toUpper(*it));
 		++it;
 	}
 	return result;
@@ -381,8 +380,7 @@ S& toUpperInPlace(S& str)
 #endif
 	while (it != end)
 	{
-		int ch = static_cast<unsigned char>(*it);
-		*it = static_cast<typename S::value_type>(Ascii::toUpper(ch));
+		*it = static_cast<typename S::value_type>(Ascii::toUpper(*it));
 		++it;
 	}
 	return str;
@@ -407,8 +405,7 @@ S toLower(const S& str)
 #endif
 	while (it != end)
 	{
-		int ch = static_cast<unsigned char>(*it);
-		*it = static_cast<typename S::value_type>(Ascii::toLower(ch));
+			*it = static_cast<typename S::value_type>(Ascii::toLower(*it));
 		++it;
 	}
 	return result;
@@ -431,8 +428,7 @@ S& toLowerInPlace(S& str)
 #endif
 	while (it != end)
 	{
-		int ch = static_cast<unsigned char>(*it);
-		*it = static_cast<typename S::value_type>(Ascii::toLower(ch));
+			*it = static_cast<typename S::value_type>(Ascii::toLower(*it));
 		++it;
 	}
 	return str;
@@ -591,7 +587,7 @@ int icompare(
 	typename S::size_type pos,
 	const typename S::value_type* ptr)
 {
-	int n = pos < str.size() ? str.size() - pos : 0;
+	int n = static_cast<int>(pos < str.size() ? str.size() - pos : 0);
 	return icompare(str, pos, n, ptr);
 }
 

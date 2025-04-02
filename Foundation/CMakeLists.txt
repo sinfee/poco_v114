@@ -31,11 +31,22 @@ if(POCO_UNBUNDLED)
 	find_package(ZLIB REQUIRED)
 	find_package(Utf8Proc REQUIRED)
 
-	#HACK: Unicode.cpp requires functions from these files. The can't be taken from the library
-	POCO_SOURCES(SRCS RegExp
-		src/pcre2_ucd.c
-		src/pcre2_tables.c
-	)
+	# pcre2 source files are linked with Foundation when shared library pcre2 is linked.
+	# When linking pcre2 as static library the symbols are accessible.
+	get_target_property(_PCRE2TYPE Pcre2::Pcre2 TYPE)
+	if("${_PCRE2TYPE}" STREQUAL "SHARED_LIBRARY")
+		#HACK: Unicode.cpp requires functions from these files. The can't be taken from the library
+		POCO_SOURCES(SRCS RegExp
+			src/pcre2_ucd.c
+			src/pcre2_tables.c
+		)
+	elseif ("${_PCRE2TYPE}" STREQUAL "STATIC_LIBRARY")
+		message(STATUS "PCRE2: linking static library.")
+	else()
+		message(WARNING "PCRE2: unknown library type: ${_PCRE2TYPE}")
+	endif()
+
+	unset(_PCRE2TYPE)
 
 else()
 	# pcre2
@@ -105,6 +116,8 @@ else()
 	target_compile_definitions(Foundation PUBLIC UTF8PROC_STATIC)
 endif(POCO_UNBUNDLED)
 
+target_compile_definitions(Foundation PUBLIC POCO_CMAKE)
+
 target_include_directories(Foundation
 	PUBLIC
 		$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
@@ -126,6 +139,12 @@ target_compile_features(Foundation
 )
 if(NOT DISABLE_CPP14 AND CMAKE_VERSION VERSION_GREATER "3.8")
 	target_compile_features(Foundation PUBLIC cxx_std_14)
+endif()
+
+if(NOT BUILD_SHARED_LIBS)
+	# The define must be set here to be included in the generated CMake files
+	# and properly detect build in the installed files.
+	target_compile_definitions(Foundation PUBLIC POCO_STATIC)
 endif()
 
 if(WIN32)
