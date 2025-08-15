@@ -70,9 +70,6 @@ extern "C" {
 # ifndef OPENSSL_NO_DEVCRYPTOENG
 #  define OPENSSL_NO_DEVCRYPTOENG
 # endif
-# ifndef OPENSSL_NO_DOCS
-#  define OPENSSL_NO_DOCS
-# endif
 # ifndef OPENSSL_NO_EC_NISTP_64_GCC_128
 #  define OPENSSL_NO_EC_NISTP_64_GCC_128
 # endif
@@ -109,9 +106,6 @@ extern "C" {
 # ifndef OPENSSL_NO_KTLS
 #  define OPENSSL_NO_KTLS
 # endif
-# ifndef OPENSSL_NO_LOADERENG
-#  define OPENSSL_NO_LOADERENG
-# endif
 # ifndef OPENSSL_NO_MD2
 #  define OPENSSL_NO_MD2
 # endif
@@ -135,9 +129,6 @@ extern "C" {
 # endif
 # ifndef OPENSSL_NO_SSLKEYLOG
 #  define OPENSSL_NO_SSLKEYLOG
-# endif
-# ifndef OPENSSL_NO_TESTS
-#  define OPENSSL_NO_TESTS
 # endif
 # ifndef OPENSSL_NO_TFO
 #  define OPENSSL_NO_TFO
@@ -166,8 +157,8 @@ extern "C" {
 # ifndef OPENSSL_NO_ZSTD_DYNAMIC
 #  define OPENSSL_NO_ZSTD_DYNAMIC
 # endif
-# ifndef OPENSSL_NO_DYNAMIC_ENGINE
-#  define OPENSSL_NO_DYNAMIC_ENGINE
+# ifndef OPENSSL_NO_STATIC_ENGINE
+#  define OPENSSL_NO_STATIC_ENGINE
 # endif
 
 

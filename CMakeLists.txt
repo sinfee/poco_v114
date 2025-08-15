@@ -36,17 +36,31 @@ list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 # Setup C/C++ compiler options
 #################################################################################
 
-# C++17 compiler flags
+# Detect if compiler supports at least C++17 standard
 include(CXX1x)
 check_for_cxx17_compiler(CXX17_COMPILER)
 
-# If a C++17 compiler is available, then set the appropriate flags
-if(CXX17_COMPILER)
-	set(CMAKE_CXX_STANDARD 17)
-	set(CMAKE_CXX_STANDARD_REQUIRED ON)
-else()
+if(NOT CXX17_COMPILER)
 	message(FATAL_ERROR "Compiler does not support C++17.")
 endif()
+
+# If a C++17 compiler is available, then set the appropriate flags
+
+option(POCO_ENABLE_CPP20 "Build Poco with C++20 standard" ON)
+
+if (EMSCRIPTEN)
+	set(POCO_ENABLE_CPP20 OFF CACHE BOOL "Build Poco with C++20 standard" FORCE)
+endif()
+
+if (POCO_ENABLE_CPP20)
+	set(CMAKE_CXX_STANDARD 20)
+	message(STATUS "Building Poco with C++20 standard")
+else()
+	set(CMAKE_CXX_STANDARD 17)
+	message(STATUS "Building Poco with C++17 standard")
+endif()
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
 
 if(NOT CMAKE_BUILD_TYPE)
 	set(CMAKE_BUILD_TYPE "RelWithDebInfo")
@@ -77,6 +91,13 @@ option(ENABLE_NETSSL_WIN "Enable NetSSL Windows" OFF)
 # Path to OpenSSL installation root can be provided by setting a variable
 # OPENSSL_ROOT_DIR.
 #
+
+# CMake pre-4.1 does not have fixes to find ARM Windows OpenSSL built-in yet.
+# Corrected find script is included with Poco for older version of CMake.
+if (WIN32 AND CMAKE_VERSION VERSION_LESS  "4.1.0") 
+    message("Custom FindOpenSSL with updates for ARM64 Windows is used.")
+	list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/openssl)
+endif()
 
 if(ENABLE_CRYPTO OR ENABLE_NETSSL OR ENABLE_JWT)
 	find_package(OpenSSL REQUIRED)
@@ -195,6 +216,9 @@ if(ENABLE_ACTIVERECORD AND NOT ENABLE_XML)
 	set(ENABLE_XML ON CACHE BOOL "Enable XML" FORCE)
 endif()
 
+option(ENABLE_CPPUNIT
+	"Set to OFF|ON (default is OFF) to enable CppUnit library" OFF)
+
 option(ENABLE_TESTS
 	"Set to OFF|ON (default is OFF) to control build of POCO tests" OFF)
 
@@ -217,6 +241,9 @@ if(ENABLE_TESTS)
 	include(CTest)
 	enable_testing()
 	message(STATUS "Building with unit tests")
+	
+	set(ENABLE_CPPUNIT ON CACHE BOOL "Enable CppUnit" FORCE)
+	
 	if(ENABLE_TEST_DEPRECATED)
 		add_compile_definitions(POCO_TEST_DEPRECATED)
 	endif()
@@ -262,6 +289,7 @@ if(ENABLE_TRACE)
 endif()
 
 include(DefinePlatformSpecific)
+add_compile_definitions(POCO_CMAKE)
 
 # Collect the built libraries and include dirs, the will be used to create the PocoConfig.cmake file
 set(Poco_COMPONENTS "")
@@ -270,6 +298,7 @@ if(ENABLE_TESTS)
 	add_subdirectory(CppUnit)
 	set(ENABLE_XML ON CACHE BOOL "Enable XML" FORCE)
 	set(ENABLE_JSON ON CACHE BOOL "Enable JSON" FORCE)
+	list(APPEND Poco_COMPONENTS "CppUnit")
 endif()
 
 if(ENABLE_ENCODINGS_COMPILER OR ENABLE_APACHECONNECTOR)
@@ -351,6 +380,7 @@ endif()
 
 if(ENABLE_FOUNDATION)
 	add_subdirectory(Foundation)
+	list(APPEND Poco_COMPONENTS "Foundation")
 endif()
 
 if(ENABLE_ENCODINGS)
@@ -459,12 +489,12 @@ if(EXISTS ${PROJECT_SOURCE_DIR}/ActiveRecord/Compiler AND ENABLE_ACTIVERECORD_CO
 	list(APPEND Poco_COMPONENTS "ActiveRecordCompiler")
 endif()
 
-if(EXISTS ${PROJECT_SOURCE_DIR}/SevenZip AND ENABLE_SEVENZIP AND ENABLE_XML)
+if(EXISTS ${PROJECT_SOURCE_DIR}/SevenZip AND ENABLE_SEVENZIP)
 	add_subdirectory(SevenZip)
 	list(APPEND Poco_COMPONENTS "SevenZip")
 endif()
 
-if(EXISTS ${PROJECT_SOURCE_DIR}/Zip AND ENABLE_ZIP AND ENABLE_XML)
+if(EXISTS ${PROJECT_SOURCE_DIR}/Zip AND ENABLE_ZIP)
 	add_subdirectory(Zip)
 	list(APPEND Poco_COMPONENTS "Zip")
 endif()
@@ -513,7 +543,7 @@ configure_file(
 	"${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake"
 	IMMEDIATE @ONLY)
 
-add_custom_target(uninstall
+add_custom_target(uninstall-poco
 	"${CMAKE_COMMAND}" -P "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake"
 )
 
@@ -561,11 +591,6 @@ install(
 	COMPONENT
 		Devel
 )
-
-if(POCO_UNBUNDLED)
-	install(FILES cmake/FindPCRE2.cmake DESTINATION "${PocoConfigPackageLocation}")
-	install(FILES cmake/FindUtf8Proc.cmake DESTINATION "${PocoConfigPackageLocation}")
-endif()
 
 message(STATUS "CMake ${CMAKE_VERSION} successfully configured ${PROJECT_NAME} using ${CMAKE_GENERATOR} generator")
 message(STATUS "${PROJECT_NAME} package version: ${PROJECT_VERSION}")

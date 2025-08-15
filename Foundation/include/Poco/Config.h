@@ -186,6 +186,17 @@
 #endif
 
 #define POCO_HAVE_CPP17_COMPILER (__cplusplus >= 201703L)
+#define POCO_HAVE_CPP20_COMPILER (__cplusplus >= 202002L)
+#define POCO_HAVE_CPP23_COMPILER (__cplusplus >= 202302L)
+
+#if (POCO_HAVE_CPP20_COMPILER)
+#include <version>
+#if defined(__cpp_lib_jthread)
+	#define POCO_HAVE_JTHREAD true
+#else
+	#define POCO_HAVE_JTHREAD false
+#endif
+#endif
 
 // Option to silence deprecation warnings.
 #ifndef POCO_SILENCE_DEPRECATED

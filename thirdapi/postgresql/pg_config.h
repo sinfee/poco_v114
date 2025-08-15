@@ -32,7 +32,7 @@
 #define BLCKSZ 8192
 
 /* Saved arguments from configure */
-#define CONFIGURE_ARGS "--enable-thread-safety --enable-nls --with-ldap --with-ssl=openssl --with-libxml --with-libxslt --with-lz4 --with-zstd --with-icu --with-tcl --with-python"
+#define CONFIGURE_ARGS "--enable-thread-safety --with-ldap --with-ssl=openssl --with-lz4"
 
 /* Define to the default TCP port number on which the server listens and to
    which clients will try to connect. This can be overridden at run-time, but
@@ -50,7 +50,7 @@
 /* #undef ENABLE_GSS */
 
 /* Define to 1 if you want National Language Support. (--enable-nls) */
-#define ENABLE_NLS 1
+/* #undef ENABLE_NLS */
 
 /* Define to 1 to build client libraries as thread-safe code.
    (--enable-thread-safety) */
@@ -128,6 +128,10 @@
 /* Define to 1 if you have the declaration of `pwritev', and to 0 if you
    don't. */
 #define HAVE_DECL_PWRITEV 0
+
+/* Define to 1 if you have the declaration of `strchrnul', and to 0 if you
+   don't. */
+#define HAVE_DECL_STRCHRNUL 0
 
 /* Define to 1 if you have the declaration of `strlcat', and to 0 if you
    don't. */
@@ -285,16 +289,16 @@
 /* #undef HAVE_LIBWLDAP32 */
 
 /* Define to 1 if you have the `xml2' library (-lxml2). */
-#define HAVE_LIBXML2 1
+/* #undef HAVE_LIBXML2 */
 
 /* Define to 1 if you have the `xslt' library (-lxslt). */
-#define HAVE_LIBXSLT 1
+/* #undef HAVE_LIBXSLT */
 
 /* Define to 1 if you have the `z' library (-lz). */
 #define HAVE_LIBZ 1
 
 /* Define to 1 if you have the `zstd' library (-lzstd). */
-#define HAVE_LIBZSTD 1
+/* #undef HAVE_LIBZSTD */
 
 /* Define to 1 if the system has the type `locale_t'. */
 #define HAVE_LOCALE_T 1
@@ -404,17 +408,11 @@
 /* Define to 1 if you have the `SSL_CTX_set_num_tickets' function. */
 #define HAVE_SSL_CTX_SET_NUM_TICKETS 1
 
-/* Define to 1 if stdbool.h conforms to C99. */
-#define HAVE_STDBOOL_H 1
-
 /* Define to 1 if you have the <stdint.h> header file. */
 #define HAVE_STDINT_H 1
 
 /* Define to 1 if you have the <stdlib.h> header file. */
 #define HAVE_STDLIB_H 1
-
-/* Define to 1 if you have the `strchrnul' function. */
-/* #undef HAVE_STRCHRNUL */
 
 /* Define to 1 if you have the `strerror_r' function. */
 /* #undef HAVE_STRERROR_R */
@@ -536,9 +534,6 @@
 /* Define to 1 if the assembler supports X86_64's POPCNTQ instruction. */
 /* #undef HAVE_X86_64_POPCNTQ */
 
-/* Define to 1 if the system has the type `_Bool'. */
-/* #undef HAVE__BOOL */
-
 /* Define to 1 if your compiler understands __builtin_bswap16. */
 /* #undef HAVE__BUILTIN_BSWAP16 */
 
@@ -607,7 +602,7 @@
 #define PACKAGE_NAME "PostgreSQL"
 
 /* Define to the full name and version of this package. */
-#define PACKAGE_STRING "PostgreSQL 16.4"
+#define PACKAGE_STRING "PostgreSQL 16.9"
 
 /* Define to the one symbol short name of this package. */
 #define PACKAGE_TARNAME "postgresql"
@@ -616,7 +611,7 @@
 #define PACKAGE_URL "https://www.postgresql.org/"
 
 /* Define to the version of this package. */
-#define PACKAGE_VERSION "16.4"
+#define PACKAGE_VERSION "16.9"
 
 /* Define to the name of a signed 128-bit integer type. */
 /* #undef PG_INT128_TYPE */
@@ -635,7 +630,7 @@
 #define PG_MAJORVERSION_NUM 16
 
 /* PostgreSQL minor version number */
-#define PG_MINORVERSION_NUM 4
+#define PG_MINORVERSION_NUM 9
 
 /* Define to best printf format archetype, usually gnu_printf if available. */
 /* #undef PG_PRINTF_ATTRIBUTE */
@@ -644,13 +639,13 @@
 #define PG_USE_STDBOOL 1
 
 /* PostgreSQL version as a string */
-#define PG_VERSION "16.4"
+#define PG_VERSION "16.9"
 
 /* PostgreSQL version as a number */
-#define PG_VERSION_NUM 160004
+#define PG_VERSION_NUM 160009
 
 /* A string containing the version number, platform, and C compiler */
-#define PG_VERSION_STR "PostgreSQL 16.4, compiled by Visual C++ build " CppAsString2(_MSC_VER) ", 64-bit"
+#define PG_VERSION_STR "PostgreSQL 16.9, compiled by Visual C++ build " CppAsString2(_MSC_VER) ", 64-bit"
 
 /* Define to 1 to allow profiling output to be saved separately for each
    process. */
@@ -710,17 +705,17 @@
 /* #undef USE_BSD_AUTH */
 
 /* Define to build with ICU support. (--with-icu) */
-#define USE_ICU 1
+/* #undef USE_ICU */
 
 /* Define to 1 to build with LDAP support. (--with-ldap) */
 #define USE_LDAP 1
 
 /* Define to 1 to build with XML support. (--with-libxml) */
-#define USE_LIBXML 1
+/* #undef USE_LIBXML */
 
 /* Define to 1 to use XSLT support when building contrib/xml2.
    (--with-libxslt) */
-#define USE_LIBXSLT 1
+/* #undef USE_LIBXSLT */
 
 /* Define to 1 to build with LLVM based JIT support. (--with-llvm) */
 /* #undef USE_LLVM */
@@ -765,7 +760,7 @@
 #define USE_WIN32_SHARED_MEMORY 1
 
 /* Define to 1 to build with ZSTD support. (--with-zstd) */
-#define USE_ZSTD 1
+/* #undef USE_ZSTD */
 
 /* Define to 1 if `wcstombs_l' requires <xlocale.h>. */
 /* #undef WCSTOMBS_L_IN_XLOCALE */

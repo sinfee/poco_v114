@@ -21,9 +21,9 @@
     <Link>
       <AdditionalLibraryDirectories Condition="$(THK_XP_MODE) ==1  or $(PlatformToolset.EndsWith('_xp'))">$(SolutionDir)lib_$(PlatformTarget)_$(PlatformToolset)_xp;$(SolutionDir)thirdapi\lib$(PlatformTarget);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalLibraryDirectories Condition="$(THK_XP_MODE) !=1  AND !$(PlatformToolset.EndsWith('_xp'))">$(SolutionDir)lib_$(PlatformTarget)_$(PlatformToolset);$(SolutionDir)thirdapi\lib$(PlatformTarget);$(ThkExtApi)\YYThunk\objs\$(PlatformTarget);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies Condition="$(THK_XP_MODE) ==1  or $(PlatformToolset.EndsWith('_xp'))">YY_Thunks_for_WinXP.obj;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalDependencies Condition="$(THK_XP_MODE) !=1  AND !$(PlatformToolset.EndsWith('_xp'))">YY_Thunks_for_Win7.obj;%(AdditionalDependencies)</AdditionalDependencies>
-      <EntryPointSymbol Condition="'$(OutputType)' == 'library' AND ($(THK_XP_MODE) ==1  or $(PlatformToolset.EndsWith('_xp')))">DllMainCRTStartupForYY_Thunks</EntryPointSymbol>
+      <AdditionalDependencies Condition="$(PlatformTarget) != 'ARM64' AND ($(THK_XP_MODE) ==1  or $(PlatformToolset.EndsWith('_xp')))">YY_Thunks_for_WinXP.obj;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies Condition="$(PlatformTarget) != 'ARM64' AND ($(THK_XP_MODE) !=1  AND !$(PlatformToolset.EndsWith('_xp')))">YY_Thunks_for_Win7.obj;%(AdditionalDependencies)</AdditionalDependencies>
+      <EntryPointSymbol Condition="$(PlatformTarget) != 'ARM64' AND ('$(OutputType)' == 'library' AND ($(THK_XP_MODE) ==1  or $(PlatformToolset.EndsWith('_xp'))))">DllMainCRTStartupForYY_Thunks</EntryPointSymbol>
     </Link>
   </ItemDefinitionGroup>
   <PropertyGroup Label="Configuration">
